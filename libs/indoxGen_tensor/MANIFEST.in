@@ -1,1 +1,3 @@
-include README.md
+include README.md            # Include README for documentation
+include requirements.txt     # Include the requirements file for this module
+recursive-include GAN *      # Include everything from the GAN directory

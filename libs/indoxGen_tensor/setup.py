@@ -4,16 +4,14 @@ from setuptools import setup, find_packages
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-# Extract package names
-packages = [req.split('==')[0] for req in requirements]
+packages = [req.split('==')[0] for req in requirements if '==' in req]
 
-# Read the README file for the long description
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name='indoxGen-tensor',
-    version='0.0.1',
+    version='0.0.2',
     license='AGPL-3.0',
     packages=find_packages(),
     include_package_data=True,
@@ -22,7 +20,7 @@ setup(
     long_description_content_type="text/markdown",
     author='nerdstudio',
     author_email='ashkan@nematifamilyfundation.onmicrosoft.com',
-    url='https://github.com/osllmai/IndoxGen/indoxGen_tensor',
+    url='https://github.com/osllmai/IndoxGen/tree/master/libs/indoxGen_tensor',
     keywords=[
         'AI',
         'deep learning',
@@ -31,7 +29,7 @@ setup(
         'machine learning',
         'NLP'
     ],
-    install_requires=packages,
+    install_requires=packages,  # List of dependencies read from 'requirements.txt'
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
