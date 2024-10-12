@@ -6,10 +6,12 @@ from sklearn import metrics
 from dython.nominal import associations
 from scipy.stats import ks_2samp, wasserstein_distance
 from scipy.spatial import distance
+import matplotlib.pyplot as plt
+import seaborn as sns
+import torch
 import warnings
 from sklearn.exceptions import ConvergenceWarning
 warnings.filterwarnings("ignore")
-
 
 # Part 1: Utility Functions
 def train_and_evaluate_classifier(x_train, y_train, x_test, y_test, classifier_name):
@@ -291,7 +293,6 @@ def evaluate_privacy(real_data, synthetic_data, data_percent=15):
     return np.array([fifth_perc_rf, fifth_perc_rr, fifth_perc_ff, nn_fifth_perc_rf, nn_fifth_perc_rr, nn_fifth_perc_ff]).reshape(1, 6)
 
 
-
 # Part 4: Data Drift Evaluation
 def calculate_psi(real, synthetic, bins=10):
     real_hist, bin_edges = np.histogram(real, bins=bins)
@@ -369,8 +370,6 @@ def plot_distributions(real_data, synthetic_data, cat_cols, num_cols):
         List of numerical columns.
 
     """
-    import seaborn as sns
-    import matplotlib.pyplot as plt
 
     total_plots = len(cat_cols) + len(num_cols)
     cols = 2
