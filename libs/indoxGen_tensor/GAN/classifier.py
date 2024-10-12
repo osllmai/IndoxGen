@@ -4,7 +4,6 @@ from libs.indoxGen_tensor.GAN.config import TabularGANConfig
 
 
 class Classifier(keras.Model):
-
     """
     Classifier class for the GAN model, designed to classify generated tabular data into multiple classes.
 
@@ -34,30 +33,37 @@ class Classifier(keras.Model):
         self.num_classes = num_classes
         self.model = self.build_model()
 
-    def build_model(self) -> keras.Model:
+    def build_model(self):
         """
-        Builds the classifier model based on the configuration and the number of output classes.
+        Builds the discriminator model based on the configuration, including a Bidirectional LSTM layer.
 
         Returns:
         --------
-        keras.Model:
-            A Keras model representing the classifier architecture.
+        tf.keras.Model:
+            A Keras Model representing the discriminator architecture with Bidirectional LSTM.
         """
-        # Input layer
-        inputs = keras.Input(shape=(self.config.output_dim,))
+        input_layer = tf.keras.layers.Input(shape=(self.config.output_dim,))
 
-        # Hidden layers based on discriminator layers configuration
-        x = inputs
+        # Reshape input for BiLSTM layer
+        x = tf.keras.layers.Reshape((1, self.config.output_dim))(input_layer)
+
+        # Add Bidirectional LSTM layer
+        x = tf.keras.layers.Bidirectional(
+            tf.keras.layers.LSTM(units=64, return_sequences=False)
+        )(x)
+
         for units in self.config.discriminator_layers:
-            x = keras.layers.Dense(units, kernel_initializer='he_normal')(x)
-            x = keras.layers.LeakyReLU(negative_slope=0.2)(x)
-            x = keras.layers.Dropout(0.5)(x)
+            x = tf.keras.layers.Dense(units, kernel_initializer='he_normal')(x)
+            x = tf.keras.layers.LeakyReLU(negative_slope=0.2)(x)
+            x = tf.keras.layers.LayerNormalization()(x)
+            x = tf.keras.layers.Dropout(0.3)(x)
 
-        # Output layer with softmax activation for multi-class classification
-        outputs = keras.layers.Dense(self.num_classes, activation='softmax')(x)
+        # Use linear activation for WGAN-GP
+        output_layer = tf.keras.layers.Dense(1)(x)
 
-        # Create and return the model
-        return keras.Model(inputs=inputs, outputs=outputs)
+        model = tf.keras.Model(inputs=input_layer, outputs=output_layer)
+
+        return model
 
     def call(self, inputs: tf.Tensor) -> tf.Tensor:
         """

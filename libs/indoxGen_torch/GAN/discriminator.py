@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from libs.indoxGen_torch.GAN.config import TabularGANConfig
 
+
 class Discriminator(nn.Module):
     """
     Discriminator class for the GAN model, responsible for classifying real and generated data.
@@ -36,6 +37,7 @@ class Discriminator(nn.Module):
             A PyTorch Sequential model representing the discriminator architecture.
         """
         layers = []
+
         input_dim = self.config.output_dim
 
         # Input layer
@@ -69,7 +71,8 @@ class Discriminator(nn.Module):
         """
         return self.model(inputs)
 
-    def gradient_penalty(self, real_samples: torch.Tensor, fake_samples: torch.Tensor, device: torch.device) -> torch.Tensor:
+    def gradient_penalty(self, real_samples: torch.Tensor, fake_samples: torch.Tensor,
+                         device: torch.device) -> torch.Tensor:
         """
         Calculates the gradient penalty for WGAN-GP.
 

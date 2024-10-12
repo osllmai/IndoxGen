@@ -27,26 +27,33 @@ class Discriminator(tf.keras.Model):
 
     def build_model(self):
         """
-        Builds the discriminator model based on the configuration.
+        Builds the discriminator model based on the configuration, including a Bidirectional LSTM layer.
 
         Returns:
         --------
-        tf.keras.Sequential:
-            A Keras Sequential model representing the discriminator architecture.
+        tf.keras.Model:
+            A Keras Model representing the discriminator architecture with Bidirectional LSTM.
         """
-        model = tf.keras.Sequential()
+        input_layer = tf.keras.layers.Input(shape=(self.config.output_dim,))
 
-        # Input layer
-        model.add(tf.keras.layers.Input(shape=(self.config.output_dim,)))
+        # Reshape input for BiLSTM layer
+        x = tf.keras.layers.Reshape((1, self.config.output_dim))(input_layer)
+
+        # Add Bidirectional LSTM layer
+        x = tf.keras.layers.Bidirectional(
+            tf.keras.layers.LSTM(units=64, return_sequences=False)
+        )(x)
 
         for units in self.config.discriminator_layers:
-            model.add(tf.keras.layers.Dense(units, kernel_initializer='he_normal'))
-            model.add(tf.keras.layers.LeakyReLU(negative_slope=0.2))
-            model.add(tf.keras.layers.LayerNormalization())
-            model.add(tf.keras.layers.Dropout(0.3))
+            x = tf.keras.layers.Dense(units, kernel_initializer='he_normal')(x)
+            x = tf.keras.layers.LeakyReLU(negative_slope=0.2)(x)
+            x = tf.keras.layers.LayerNormalization()(x)
+            x = tf.keras.layers.Dropout(0.3)(x)
 
         # Use linear activation for WGAN-GP
-        model.add(tf.keras.layers.Dense(1))
+        output_layer = tf.keras.layers.Dense(1)(x)
+
+        model = tf.keras.Model(inputs=input_layer, outputs=output_layer)
 
         return model
 

@@ -27,29 +27,32 @@ class Generator(tf.keras.Model):
 
     def build_model(self):
         """
-        Builds the generator model based on the configuration.
+        Builds the generator model based on the configuration, including a Bidirectional LSTM layer.
 
         Returns:
         --------
-        tf.keras.Sequential:
-            A Keras Sequential model representing the generator architecture.
+        tf.keras.Model:
+            A Keras Model representing the generator architecture with Bidirectional LSTM.
         """
-        model = tf.keras.Sequential()
+        input_layer = tf.keras.layers.Input(shape=(self.config.input_dim,))
 
-        # Input layer
-        model.add(tf.keras.layers.Input(shape=(self.config.input_dim,)))
+        x = tf.keras.layers.Reshape((1, self.config.input_dim))(input_layer)
+
+        x = tf.keras.layers.Bidirectional(
+            tf.keras.layers.LSTM(units=64, return_sequences=False)
+        )(x)
 
         for i, units in enumerate(self.config.generator_layers):
-            model.add(tf.keras.layers.Dense(units, kernel_initializer='he_normal'))
-            model.add(tf.keras.layers.LeakyReLU(negative_slope=0.2))
-            model.add(tf.keras.layers.BatchNormalization())
+            x = tf.keras.layers.Dense(units, kernel_initializer='he_normal')(x)
+            x = tf.keras.layers.LeakyReLU(negative_slope=0.2)(x)
+            x = tf.keras.layers.BatchNormalization()(x)
 
-            # Add residual connections for deeper networks
             if i > 0 and i % 2 == 0 and units == self.config.generator_layers[i - 2]:
-                model.add(tf.keras.layers.Add())
+                x = tf.keras.layers.Add()([x, tf.keras.layers.Dense(units)(x)])
 
-        # Final layer to match the output dimension
-        model.add(tf.keras.layers.Dense(self.config.output_dim, activation='tanh'))
+        output_layer = tf.keras.layers.Dense(self.config.output_dim, activation='tanh')(x)
+
+        model = tf.keras.Model(inputs=input_layer, outputs=output_layer)
 
         return model
 
