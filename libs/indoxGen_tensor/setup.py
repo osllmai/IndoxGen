@@ -22,7 +22,7 @@ setup(
     long_description_content_type="text/markdown",
     author='nerdstudio',
     author_email='ashkan@nematifamilyfundation.onmicrosoft.com',
-    url='https://github.com/osllmai/IndoxGen/IndoxGen-tensor',
+    url='https://github.com/osllmai/IndoxGen/indoxGen_tensor',
     keywords=[
         'AI',
         'deep learning',
