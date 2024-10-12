@@ -12,8 +12,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name='IndoxGen-tensor',
-    version='0.0.0',
+    name='indoxGen-tensor',
+    version='0.0.1',
     license='AGPL-3.0',
     packages=find_packages(),
     include_package_data=True,

@@ -12,7 +12,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name='IndoxGen-torch',
+    name='indoxGen-torch',
     version='0.0.0',
     license='AGPL-3.0',
     packages=find_packages(),
