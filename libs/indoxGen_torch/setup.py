@@ -12,17 +12,17 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name='IndoxGen-tensor',
+    name='IndoxGen-torch',
     version='0.0.0',
     license='AGPL-3.0',
     packages=find_packages(),
     include_package_data=True,
-    description='Indox Synthetic Data Generation (GAN-tensorflow)',
+    description='Indox Synthetic Data Generation (GAN-pytorch)',
     long_description=long_description,
     long_description_content_type="text/markdown",
     author='nerdstudio',
     author_email='ashkan@nematifamilyfundation.onmicrosoft.com',
-    url='https://github.com/osllmai/IndoxGen/IndoxGen-tensor',
+    url='https://github.com/osllmai/IndoxGen/IndoxGen-torch',
     keywords=[
         'AI',
         'deep learning',

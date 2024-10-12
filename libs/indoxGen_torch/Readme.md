@@ -1,12 +1,12 @@
 # IndoxGen-Torch: Advanced GAN-based Synthetic Data Generation Framework
 
 [![License](https://img.shields.io/github/license/osllmai/IndoxGen-Torch)](https://github.com/osllmai/IndoxGen-Torch/blob/main/LICENSE)
-[![PyPI](https://badge.fury.io/py/IndoxGen-Torch.svg)](https://pypi.org/project/IndoxGen-Torch/)
-[![Python](https://img.shields.io/pypi/pyversions/IndoxGen-Torch.svg)](https://pypi.org/project/IndoxGen-Torch/)
-[![Downloads](https://static.pepy.tech/badge/IndoxGen-Torch)](https://pepy.tech/project/IndoxGen-Torch)
+[![PyPI](https://badge.fury.io/py/IndoxGen-Torch.svg)](https://pypi.org/project/IndoxGen-torch/)
+[![Python](https://img.shields.io/pypi/pyversions/IndoxGen-Torch.svg)](https://pypi.org/project/IndoxGen-torch/)
+[![Downloads](https://static.pepy.tech/badge/IndoxGen-Torch)](https://pepy.tech/project/IndoxGen-torch)
 
 [![Discord](https://img.shields.io/discord/1223867382460579961?label=Discord&logo=Discord&style=social)](https://discord.com/invite/ossllmai)
-[![GitHub stars](https://img.shields.io/github/stars/osllmai/IndoxGen-Torch?style=social)](https://github.com/osllmai/IndoxGen-Torch)
+[![GitHub stars](https://img.shields.io/github/stars/osllmai/IndoxGen-torch?style=social)](https://github.com/osllmai/IndoxGen-torch)
 
 <p align="center">
   <a href="https://osllm.ai">Official Website</a> &bull; <a href="https://docs.osllm.ai/index.html">Documentation</a> &bull; <a href="https://discord.gg/qrCc56ZR">Discord</a>
@@ -99,12 +99,9 @@ custom_trainer = TabularGANTrainer(config=custom_config, ...)
 ### Handling Imbalanced Datasets
 
 ```python
-# Assuming 'rare_class' is underrepresented in your original data
 original_class_distribution = data['target_column'].value_counts(normalize=True)
 synthetic_data = trainer.generate_samples(100000)
 synthetic_class_distribution = synthetic_data['target_column'].value_counts(normalize=True)
-
-# Adjust generation or sampling to match desired distribution
 ```
 
 ## Configuration and Customization
