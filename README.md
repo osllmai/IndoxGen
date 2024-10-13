@@ -1,6 +1,6 @@
 # IndoxGen: Comprehensive Synthetic Data Generation Framework
 
-[![License](https://img.shields.io/github/license/osllmai/indoxGen)](https://github.com/osllmai/indoxGen/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/osllmai/indoxGen)](https://github.com/osllmai/IndoxGen/tree/master/libs/indoxGen/LICENSE)
 [![Python](https://img.shields.io/pypi/pyversions/indoxGen.svg)](https://pypi.org/project/indoxGen/)
 
 [![Discord](https://img.shields.io/discord/1223867382460579961?label=Discord&logo=Discord&style=social)](https://discord.com/invite/ossllmai)

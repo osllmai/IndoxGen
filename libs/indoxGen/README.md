@@ -2,7 +2,7 @@
 # IndoxGen: Enterprise-Grade Synthetic Data Generation Framework
 
 
-[![License](https://img.shields.io/github/license/osllmai/indoxGen)](https://github.com/osllmai/indoxGen/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/osllmai/indoxGen)](https://github.com/osllmai/IndoxGen/tree/master/libs/indoxGen/LICENSE)
 [![PyPI](https://badge.fury.io/py/indoxGen.svg)](https://pypi.org/project/indoxGen/0.0.3/)
 [![Python](https://img.shields.io/pypi/pyversions/indoxGen.svg)](https://pypi.org/project/indoxGen/0.0.3/)
 [![Downloads](https://static.pepy.tech/badge/indoxGen)](https://pepy.tech/project/indoxGen)
