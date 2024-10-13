@@ -13,10 +13,9 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='indoxGen-torch',
-    version='0.1.0',
+    version='0.0.5',
     license='AGPL-3.0-or-later',
-    packages=find_packages(where='libs', include=['indoxGen_torch', 'indoxGen_torch.*']),
-    package_dir={'': 'libs'},
+    packages=find_packages(),
     include_package_data=True,
     description='Indox Synthetic Data Generation (GAN-pytorch)',
     long_description=long_description,
@@ -33,7 +32,7 @@ setup(
         'NLP'
     ],
     install_requires=[
-        'torch==1.9.0',
+        'torch==2.4.1',
         'seaborn==0.11.1',
         'matplotlib==3.4.2',
         'dython==0.6.4.post1',

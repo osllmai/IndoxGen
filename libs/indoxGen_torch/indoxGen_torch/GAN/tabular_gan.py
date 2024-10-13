@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from libs.indoxGen_torch.GAN.config import TabularGANConfig
-from libs.indoxGen_torch.GAN.discriminator import Discriminator
-from libs.indoxGen_torch.GAN.generator import Generator
+from .config import TabularGANConfig
+from .generator import Generator
+from .discriminator import Discriminator
 
 class TabularGAN(nn.Module):
     """

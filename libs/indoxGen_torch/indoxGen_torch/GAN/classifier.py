@@ -1,8 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from libs.indoxGen_torch.GAN.config import TabularGANConfig
-
+from .config import TabularGANConfig
 class Classifier(nn.Module):
     """
     Classifier class for the GAN model, designed to classify generated tabular data into multiple classes.

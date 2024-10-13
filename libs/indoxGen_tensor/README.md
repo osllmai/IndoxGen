@@ -1,12 +1,12 @@
 # IndoxGen-Tensor: Advanced GAN-based Synthetic Data Generation Framework
 
-[![License](https://img.shields.io/github/license/osllmai/indoxGen_tensor)](https://github.com/osllmai/indoxGen_tensor/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/osllmai/indoxGen_tensor)](https://github.com/osllmai/IndoxGen/tree/master/libs/indoxGen_tensor/LICENSE)
 [![PyPI](https://badge.fury.io/py/indoxGen-tensor.svg)](https://pypi.org/project/indoxGen-tensor/)
 [![Python](https://img.shields.io/pypi/pyversions/indoxGen-tensor.svg)](https://pypi.org/project/indoxGen-tensor/)
 [![Downloads](https://static.pepy.tech/badge/indoxGen-tensor)](https://pepy.tech/project/indoxGen-tensor)
 
 [![Discord](https://img.shields.io/discord/1223867382460579961?label=Discord&logo=Discord&style=social)](https://discord.com/invite/ossllmai)
-[![GitHub stars](https://img.shields.io/github/stars/osllmai/indoxGen-tensor?style=social)](https://github.com/osllmai/indoxGen_tensor)
+[![GitHub stars](https://img.shields.io/github/stars/osllmai/indoxGen-tensor?style=social)](https://github.com/osllmai/indoxGen)
 
 <p align="center">
   <a href="https://osllm.ai">Official Website</a> &bull; <a href="https://docs.osllm.ai/index.html">Documentation</a> &bull; <a href="https://discord.gg/qrCc56ZR">Discord</a>

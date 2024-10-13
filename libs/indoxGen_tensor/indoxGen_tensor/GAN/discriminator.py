@@ -1,5 +1,6 @@
 import tensorflow as tf
-from libs.indoxGen_tensor.GAN.config import TabularGANConfig
+
+from .config import TabularGANConfig
 
 
 class Discriminator(tf.keras.Model):
