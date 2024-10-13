@@ -15,7 +15,7 @@ setup(
     name='indoxGen-torch',
     version='0.1.0',
     license='AGPL-3.0-or-later',
-    packages=find_packages(where='libs', include=['indoxGen_torch', 'indoxGen_torch.*']),
+    packages=find_packages(),
     package_dir={'': 'libs'},
     include_package_data=True,
     description='Indox Synthetic Data Generation (GAN-pytorch)',
