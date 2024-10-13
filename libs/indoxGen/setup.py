@@ -15,7 +15,7 @@ setup(
     name='indoxGen',
     version='0.0.4',
     license='AGPL-3.0-or-later',
-    packages=find_packages(exclude=["indoxGen_tensor", "indoxGen_torch"]),
+    packages=find_packages(),
     include_package_data=True,
     description='Indox Synthetic Data Generation',
     long_description=long_description,
