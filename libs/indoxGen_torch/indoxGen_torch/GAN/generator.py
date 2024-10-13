@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
-from libs.indoxGen_torch.GAN.config import TabularGANConfig
-
+from .config import TabularGANConfig
 class Generator(nn.Module):
     """
     Generator class for the GAN model, which takes in random noise and generates synthetic tabular data.

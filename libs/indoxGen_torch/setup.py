@@ -13,7 +13,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='indoxGen-torch',
-    version='0.1.0',
+    version='0.0.1',
     license='AGPL-3.0-or-later',
     packages=find_packages(),
     package_dir={'': 'libs'},

@@ -1,8 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from libs.indoxGen_torch.GAN.config import TabularGANConfig
-
+from .config import TabularGANConfig
 
 class Discriminator(nn.Module):
     """
