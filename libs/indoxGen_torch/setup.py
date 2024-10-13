@@ -5,7 +5,7 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 # Extract package names
-packages = [req.split('==')[0] for req in requirements]
+packages = [req.split('==')[0] for req in requirements if '==' in req]
 
 # Read the README file for the long description
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -13,9 +13,10 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='indoxGen-torch',
-    version='0.0.0',
-    license='AGPL-3.0',
-    packages=find_packages(),
+    version='0.1.0',
+    license='AGPL-3.0-or-later',
+    packages=find_packages(where='libs', include=['indoxGen_torch', 'indoxGen_torch.*']),
+    package_dir={'': 'libs'},
     include_package_data=True,
     description='Indox Synthetic Data Generation (GAN-pytorch)',
     long_description=long_description,
@@ -31,7 +32,12 @@ setup(
         'machine learning',
         'NLP'
     ],
-    install_requires=packages,
+    install_requires=[
+        'torch==1.9.0',
+        'seaborn==0.11.1',
+        'matplotlib==3.4.2',
+        'dython==0.6.4.post1',
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

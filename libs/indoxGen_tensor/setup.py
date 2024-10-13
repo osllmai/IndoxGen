@@ -4,16 +4,19 @@ from setuptools import setup, find_packages
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
+# Extract package names
 packages = [req.split('==')[0] for req in requirements if '==' in req]
 
+# Read the README file for the long description
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name='indoxGen-tensor',
     version='0.0.2',
-    license='AGPL-3.0',
-    packages=find_packages(),
+    license='AGPL-3.0-or-later',
+    packages=find_packages(where='libs', include=['indoxGen_tensor', 'indoxGen_tensor.*']),
+    package_dir={'': 'libs'},
     include_package_data=True,
     description='Indox Synthetic Data Generation (GAN-tensorflow)',
     long_description=long_description,
@@ -29,7 +32,12 @@ setup(
         'machine learning',
         'NLP'
     ],
-    install_requires=packages,  # List of dependencies read from 'requirements.txt'
+    install_requires=[
+        'dython==0.7.8',
+        'libs==0.0.10',
+        'scipy==1.14.1',
+        'tensorflow==2.17.0',
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
