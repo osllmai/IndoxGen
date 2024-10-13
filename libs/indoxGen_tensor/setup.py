@@ -1,23 +1,31 @@
 from setuptools import setup, find_packages
+import os
+
+# Get the absolute path of the current file
+here = os.path.abspath(os.path.dirname(__file__))
+
+# Print the path to check if it's correctly detecting the directory
+print(f"Current directory: {here}")
 
 # Read the requirements file
-with open('requirements.txt') as f:
+with open(os.path.join(here, 'requirements.txt')) as f:
     requirements = f.read().splitlines()
 
-# Extract package names
-packages = [req.split('==')[0] for req in requirements if '==' in req]
-
-# Read the README file for the long description
-with open("README.md", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
+# Check if README.md exists and print a warning if not
+readme_path = os.path.join(here, "README.md")
+if not os.path.exists(readme_path):
+    print(f"WARNING: README.md not found at {readme_path}")
+else:
+    # Read the README file for the long description
+    with open(readme_path, "r", encoding="utf-8") as fh:
+        long_description = fh.read()
 
 setup(
     name='indoxGen-tensor',
-    version='0.0.3',
+    version='0.0.8',
     license='AGPL-3.0-or-later',
-    packages=find_packages(where='libs', include=['indoxGen_tensor', 'indoxGen_tensor.*']),
-    package_dir={'': 'libs'},
-    include_package_data=True,
+    packages=find_packages(include=['indoxGen_tensor', 'indoxGen_tensor.*']),
+    include_package_data=True,  # Includes additional files as per MANIFEST.in
     description='Indox Synthetic Data Generation (GAN-tensorflow)',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -25,19 +33,10 @@ setup(
     author_email='ashkan@nematifamilyfundation.onmicrosoft.com',
     url='https://github.com/osllmai/IndoxGen/tree/master/libs/indoxGen_tensor',
     keywords=[
-        'AI',
-        'deep learning',
-        'language models',
-        'synthetic data generation',
-        'machine learning',
-        'NLP'
+        'AI', 'deep learning', 'language models', 'synthetic data generation',
+        'machine learning', 'NLP', 'GAN', 'tensorflow'
     ],
-    install_requires=[
-        'dython==0.7.8',
-        'libs==0.0.10',
-        'scipy==1.14.1',
-        'tensorflow==2.17.0',
-    ],
+    install_requires=requirements,  # Dependencies from requirements.txt
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
