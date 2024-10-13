@@ -16,7 +16,6 @@ setup(
     version='0.0.1',
     license='AGPL-3.0-or-later',
     packages=find_packages(),
-    package_dir={'': 'libs'},
     include_package_data=True,
     description='Indox Synthetic Data Generation (GAN-pytorch)',
     long_description=long_description,
