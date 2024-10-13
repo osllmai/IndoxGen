@@ -32,7 +32,7 @@ setup(
         'NLP'
     ],
     install_requires=[
-        'torch==1.9.0',
+        'torch==2.4.1',
         'seaborn==0.11.1',
         'matplotlib==3.4.2',
         'dython==0.6.4.post1',
