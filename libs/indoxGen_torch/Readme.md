@@ -1,9 +1,9 @@
 # IndoxGen-Torch: Advanced GAN-based Synthetic Data Generation Framework
 
-[![License](https://img.shields.io/github/license/osllmai/IndoxGen-Torch)](https://github.com/osllmai/IndoxGen-Torch/blob/main/LICENSE)
-[![PyPI](https://badge.fury.io/py/IndoxGen-Torch.svg)](https://pypi.org/project/IndoxGen-torch/)
-[![Python](https://img.shields.io/pypi/pyversions/IndoxGen-Torch.svg)](https://pypi.org/project/IndoxGen-torch/)
-[![Downloads](https://static.pepy.tech/badge/IndoxGen-Torch)](https://pepy.tech/project/IndoxGen-torch)
+[![License](https://img.shields.io/github/license/osllmai/IndoxGen-Torch)](https://github.com/osllmai/IndoxGen/tree/master/libs/indoxGen_torch/LICENSE)
+[![PyPI](https://badge.fury.io/py/IndoxGen-Torch.svg)](https://pypi.org/project/indoxGen-torch/)
+[![Python](https://img.shields.io/pypi/pyversions/IndoxGen-Torch.svg)](https://pypi.org/project/indoxGen-torch/)
+[![Downloads](https://static.pepy.tech/badge/indoxGen-torch)](https://pepy.tech/project/IndoxGen-torch)
 
 [![Discord](https://img.shields.io/discord/1223867382460579961?label=Discord&logo=Discord&style=social)](https://discord.com/invite/ossllmai)
 [![GitHub stars](https://img.shields.io/github/stars/osllmai/IndoxGen-torch?style=social)](https://github.com/osllmai/IndoxGen-torch)
