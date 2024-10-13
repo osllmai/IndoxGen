@@ -37,7 +37,6 @@ Key Features:
 - Flexible I/O supporting various data sources and export formats
 - Advanced learning techniques including few-shot learning
 
-[Learn more about IndoxGen Core](#indoxgen-core)
 
 ### 2. IndoxGen-Tensor
 
@@ -51,7 +50,21 @@ Key Features:
 - Customizable GAN architecture
 - Scalable generation for large volumes of synthetic data
 
-[Learn more about IndoxGen-Tensor](#indoxgen-tensor)
+
+### 3. IndoxGen-Torch
+
+[![PyPI](https://badge.fury.io/py/indoxGen-tensor.svg)](https://pypi.org/project/indoxGen-tensor/)
+[![Downloads](https://static.pepy.tech/badge/indoxGen-tensor)](https://pepy.tech/project/indoxGen-tensor)
+
+Key Features:
+- GAN-based generation for high-fidelity synthetic data
+- PyTorch integration for efficient, GPU-accelerated training
+- Flexible data handling supporting categorical, mixed, and integer columns
+- Customizable GAN architecture
+- Scalable generation for large volumes of synthetic data
+
+
+
 
 ## Installation
 
