@@ -89,7 +89,7 @@ class TabularGANTrainer:
           raise ValueError("GAN model is not initialized or compiled correctly.")
 
       gan_monitor = GANMonitor(patience=patience)
-      
+
       # Initialize the DataLoader for batching
       dataset = torch.utils.data.TensorDataset(transformed_data)
       dataloader = torch.utils.data.DataLoader(dataset, batch_size=self.config.batch_size, shuffle=True)
@@ -143,7 +143,7 @@ class TabularGANTrainer:
           raise ValueError("GAN model is not trained yet. Call `train` method first.")
 
       generated_data = self.gan.generate(num_samples)
-      
+
       # No need for detach().cpu() here since it's already in numpy format
       return self.transformer.inverse_transform(generated_data)
 
@@ -157,3 +157,4 @@ class TabularGANTrainer:
         List of training logs.
         """
         return self.history
+

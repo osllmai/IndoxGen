@@ -105,3 +105,4 @@ class TabularGAN(nn.Module):
         noise = torch.randn(num_samples, self.config.input_dim, device=device)
         generated_data = self.generator(noise)
         return generated_data.detach().cpu().numpy()
+

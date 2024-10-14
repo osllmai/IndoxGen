@@ -1,6 +1,10 @@
 import torch
 import torch.nn as nn
 from .config import TabularGANConfig
+import torch
+import torch.nn as nn
+# from libs.indoxGen_torch.GAN.config import TabularGANConfig
+
 class Generator(nn.Module):
     """
     Generator class for the GAN model, which takes in random noise and generates synthetic tabular data.
@@ -26,7 +30,7 @@ class Generator(nn.Module):
 
     def build_model(self):
         """
-        Builds the generator model based on the configuration.
+        Builds the generator model based on the configuration, including a Bidirectional LSTM layer.
 
         Returns:
         --------
@@ -34,24 +38,30 @@ class Generator(nn.Module):
             A PyTorch Sequential model representing the generator architecture.
         """
         layers = []
-        input_dim = self.config.input_dim
 
-        # Input layer
-        layers.append(nn.Linear(input_dim, self.config.generator_layers[0]))
-        layers.append(nn.LeakyReLU(0.2))
-        layers.append(nn.BatchNorm1d(self.config.generator_layers[0]))
+        # Input to BiLSTM Layer
+        self.bilstm = nn.LSTM(
+            input_size=self.config.input_dim,
+            hidden_size=64,
+            bidirectional=True,
+            batch_first=True
+        )
 
-        for i in range(1, len(self.config.generator_layers)):
-            layers.append(nn.Linear(self.config.generator_layers[i - 1], self.config.generator_layers[i]))
+        input_dim = 128  # BiLSTM outputs (2 * hidden_size = 128)
+
+        # Fully connected layers after BiLSTM
+        for i in range(len(self.config.generator_layers)):
+            layers.append(nn.Linear(input_dim, self.config.generator_layers[i]))
             layers.append(nn.LeakyReLU(0.2))
             layers.append(nn.BatchNorm1d(self.config.generator_layers[i]))
+            input_dim = self.config.generator_layers[i]
 
             # Add residual connections for deeper networks
             if i > 1 and self.config.generator_layers[i] == self.config.generator_layers[i - 2]:
                 layers.append(Residual(self.config.generator_layers[i]))
 
-        # Final layer to match the output dimension
-        layers.append(nn.Linear(self.config.generator_layers[-1], self.config.output_dim))
+        # Final output layer
+        layers.append(nn.Linear(input_dim, self.config.output_dim))
         layers.append(nn.Tanh())
 
         return nn.Sequential(*layers)
@@ -70,7 +80,17 @@ class Generator(nn.Module):
         torch.Tensor:
             A batch of generated data.
         """
-        return self.model(inputs)
+        # Reshape for BiLSTM
+        inputs = inputs.unsqueeze(1)  # Shape: (batch_size, 1, input_dim)
+
+        # Pass through BiLSTM
+        lstm_out, _ = self.bilstm(inputs)  # Shape: (batch_size, 1, 128)
+
+        # Remove sequence dimension after LSTM
+        lstm_out = lstm_out.squeeze(1)  # Shape: (batch_size, 128)
+
+        # Pass through fully connected layers
+        return self.model(lstm_out)
 
     def generate(self, num_samples: int) -> torch.Tensor:
         """
@@ -102,6 +122,7 @@ class Residual(nn.Module):
     def __init__(self, input_dim: int):
         super(Residual, self).__init__()
         self.input_dim = input_dim
+        self.fc = nn.Linear(input_dim, input_dim)
 
     def forward(self, x):
         """
@@ -117,4 +138,5 @@ class Residual(nn.Module):
         torch.Tensor:
             The output tensor with the residual connection applied.
         """
-        return x + x
+        return x + self.fc(x)
+

@@ -9,9 +9,12 @@ from scipy.spatial import distance
 import matplotlib.pyplot as plt
 import seaborn as sns
 import torch
+
 import warnings
 from sklearn.exceptions import ConvergenceWarning
-warnings.filterwarnings("ignore")
+
+# Suppress only ConvergenceWarning
+warnings.filterwarnings("ignore", category=ConvergenceWarning)
 
 # Part 1: Utility Functions
 def train_and_evaluate_classifier(x_train, y_train, x_test, y_test, classifier_name):

@@ -11,4 +11,4 @@ from .GAN.evaluation import (
 
 import importlib.metadata
 
-__version__ = importlib.metadata.version("indoxGen_torch")
+# __version__ = importlib.metadata.version("indoxGen_torch")
