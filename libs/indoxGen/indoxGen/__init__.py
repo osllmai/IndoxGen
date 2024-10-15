@@ -1,6 +1,6 @@
 
 
-import importlib.metadata
-
-__version__ = importlib.metadata.version("IndoxGen")
-
+# import importlib.metadata
+#
+# __version__ = importlib.metadata.version("indoxGen")
+#

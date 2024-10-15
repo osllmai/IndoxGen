@@ -1,8 +1,8 @@
-# SyntheticDataGeneratorHF
+# InteractiveFeedbackSynth
 
 ## Overview
 
-`SyntheticDataGeneratorHF` is a Python class designed for generating synthetic data based on example data and user instructions. It utilizes language models to generate and judge synthetic data points, ensuring diversity and adherence to specified criteria. This class is particularly useful for creating realistic, diverse datasets for testing, development, or machine learning purposes. It also includes a human feedback mechanism for reviewing and regenerating data points.
+`InteractiveFeedbackSynth` is a Python class designed for generating synthetic data based on example data and user instructions. It utilizes language models to generate and judge synthetic data points, ensuring diversity and adherence to specified criteria. This class is particularly useful for creating realistic, diverse datasets for testing, development, or machine learning purposes. It also includes a human feedback mechanism for reviewing and regenerating data points.
 
 ## Table of Contents
 
@@ -15,7 +15,7 @@
 
 ## Installation
 
-To use the `SyntheticDataGeneratorHF`, you need to have Python 3.9+ installed. You can install the required dependencies using pip:
+To use the `InteractiveFeedbackSynth`, you need to have Python 3.9+ installed. You can install the required dependencies using pip:
 
 ```bash
 pip install indoxGen
@@ -23,7 +23,7 @@ pip install indoxGen
 
 ## Language Model Setup
 
-The `SyntheticDataGeneratorHF` requires two language models: one for generating data and another for judging data quality. The specific setup will depend on your chosen language model library. Here's an example using a hypothetical library:
+The `InteractiveFeedbackSynth` requires two language models: one for generating data and another for judging data quality. The specific setup will depend on your chosen language model library. Here's an example using a hypothetical library:
 
 ```python
 from indoxGen.llms import IndoxApi, OpenAi
@@ -36,14 +36,14 @@ nemotron = OpenAi(api_key=NVIDIA_API_KEY, model="nvidia/nemotron-4-340b-instruct
                   base_url="https://integrate.api.nvidia.com/v1")
 ```
 
-When initializing the `SyntheticDataGeneratorHF`, you'll pass these language model instances as the `generator_llm` and `judge_llm` parameters.
+When initializing the `InteractiveFeedbackSynth`, you'll pass these language model instances as the `generator_llm` and `judge_llm` parameters.
 
 ## Usage
 
-Here's a basic example of how to use the `SyntheticDataGeneratorHF`:
+Here's a basic example of how to use the `InteractiveFeedbackSynth`:
 
 ```python
-from indoxGen.synthCore import SyntheticDataGeneratorHF
+from indoxGen.synthCore import InteractiveFeedbackSynth
 from indoxGen.llms import OpenAi, IndoxApi
 
 # Setup language models
@@ -58,7 +58,7 @@ example_data = [
 ]
 user_instruction = "Generate diverse fictional employee data"
 
-generator = SyntheticDataGeneratorHF(
+generator = InteractiveFeedbackSynth(
     generator_llm=generator_llm,
     judge_llm=judge_llm,
     columns=columns,
@@ -80,11 +80,11 @@ print(updated_data)
 
 ## API Reference
 
-### SyntheticDataGeneratorHF
+### InteractiveFeedbackSynth
 
 #### `__init__(self, generator_llm, judge_llm, columns, example_data, user_instruction, real_data=None, diversity_threshold=0.7, max_diversity_failures=20, verbose=0, feedback_min_score=0.8)`
 
-Initialize the SyntheticDataGeneratorHF.
+Initialize the InteractiveFeedbackSynth.
 
 - `generator_llm`: Language model for generating data.
 - `judge_llm`: Language model for judging data quality.
@@ -126,7 +126,7 @@ example_data = [
 ]
 user_instruction = "Generate diverse employee data for a tech company"
 
-generator = SyntheticDataGeneratorHF(
+generator = InteractiveFeedbackSynth(
     generator_llm=your_generator_llm,
     judge_llm=your_judge_llm,
     columns=columns,
@@ -150,7 +150,7 @@ This example demonstrates how to generate employee data, review it, and then reg
 
 ## Contributing
 
-Contributions to improve `SyntheticDataGeneratorHF` are welcome. Please follow these steps:
+Contributions to improve `InteractiveFeedbackSynth` are welcome. Please follow these steps:
 
 1. Fork the repository.
 2. Create a new branch for your feature.

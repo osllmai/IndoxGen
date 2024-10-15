@@ -1,7 +1,6 @@
 import json
 import re
 from typing import List, Dict, Any, Optional
-import random
 from collections import defaultdict
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -16,7 +15,7 @@ logger.add(sys.stdout, format="<green>{level}</green>: <level>{message}</level>"
 logger.add(sys.stdout, format="<red>{level}</red>: <level>{message}</level>", level="ERROR")
 
 
-class GenerativeDataSynth:
+class LLMGenerator:
     """
     A class for generating synthetic data based on example data and user instructions.
 
@@ -25,17 +24,18 @@ class GenerativeDataSynth:
     """
 
     def __init__(
-            self,
-            generator_llm,
-            judge_llm,
-            columns: List[str],
-            example_data: List[Dict[str, Any]],
-            user_instruction: str,
-            real_data: Optional[List[Dict[str, Any]]] = None,
-            diversity_threshold: float = 0.7,
-            max_diversity_failures: int = 20,
-            verbose: int = 0
+        self,
+        generator_llm,
+        judge_llm,
+        columns: List[str],
+        example_data: List[Dict[str, Any]],
+        user_instruction: str,
+        real_data: Optional[List[Dict[str, Any]]] = None,
+        diversity_threshold: float = 0.5,  # Lowered threshold for higher diversity
+        max_diversity_failures: int = 20,
+        verbose: int = 0
     ):
+
         """
         Initialize the SyntheticDataGenerator.
 
@@ -107,12 +107,14 @@ class GenerativeDataSynth:
 
         return self._convert_to_dataframe()
 
-    def _generate_single_data_point(self) -> Dict[str, Any]:
-        """Generate a single data point."""
-        system_prompt = ("You are an advanced synthetic data generator. Create diverse and realistic data based on the "
-                         "given examples, criteria, and user instruction. Your response must be a valid JSON object "
-                         "with all property names enclosed in double quotes.")
-        prompt = self._create_generation_prompt()
+    def _generate_single_data_point(self, context=None) -> Dict[str, Any]:
+        """Generate a single data point with optional context."""
+        system_prompt = (
+            "You are an advanced synthetic data generator tasked with creating unique and diverse text data. "
+            "Ensure that each output is significantly different from previous ones and from the examples provided. "
+            "Your response must be a valid JSON object with all property names enclosed in double quotes."
+        )
+        prompt = self._create_generation_prompt(context)
 
         for attempt in range(3):
             try:
@@ -172,35 +174,36 @@ class GenerativeDataSynth:
 
         return dict(stats)
 
-    def _create_generation_prompt(self) -> str:
-        """Create a prompt for the generator LLM."""
-        prompt = f"Generate diverse synthetic data with the following columns: {', '.join(self.columns)}.\n"
-        prompt += f"User instruction: {self.user_instruction}\n"
-        prompt += ("Ensure that each generated data point is unique and significantly different from the previous "
-                   "ones.\n")
-        prompt += ("The data should be realistic and inspired by the given examples, but with substantial "
-                   "variations.\n\n")
+    def _create_generation_prompt(self, context=None) -> str:
+      """Create a prompt for the generator LLM."""
+      prompt = f"Generate a synthetic data point with the following text columns: {', '.join(self.columns)}.\n"
+      prompt += f"User instruction: {self.user_instruction}\n"
+      prompt += (
+          "Ensure that the generated text is realistic, diverse, and does not repeat previous outputs.\n"
+          "Be creative and vary the language used in the 'remarks' field.\n"
+          "Avoid using the same phrases or sentences as in the examples or previous data points.\n\n"
+      )
 
-        prompt += "Statistical information for numerical columns (use as a guide, not strict rules):\n"
-        prompt += "\n".join(
-            f"{col}: min={stats['min']}, max={stats['max']}, mean={stats['mean']:.2f}, std={stats['std']:.2f}"
-            for col, stats in self.column_stats.items() if 'mean' in stats)
+      if context:
+          prompt += "Context numerical data:\n"
+          for key, value in context.items():
+              prompt += f"- {key}: {value}\n"
+          prompt += "\nEnsure the generated text data is coherent with the numerical context.\n"
 
-        prompt += "\n\nExample values for categorical columns:\n"
-        prompt += "\n".join(f"{col}: {', '.join(list(stats['unique_values'])[:10])}"
-                            for col, stats in self.column_stats.items() if 'unique_values' in stats)
+      # Add examples if available
+      if self.example_data:
+          prompt += "\nHere are some example data points:\n"
+          for example in self.example_data[:5]:
+              # Include numerical context in the examples
+              example_context = {k: v for k, v in example.items() if k not in self.columns}
+              prompt += "Example Context:\n"
+              for key, value in example_context.items():
+                  prompt += f"- {key}: {value}\n"
+              prompt += f"Example Text Data: {json.dumps({col: example[col] for col in self.columns})}\n\n"
 
-        shuffled_examples = random.sample(self.example_data + self.real_data,
-                                          min(5, len(self.example_data) + len(self.real_data)))
-        prompt += "\n\nExample data points:\n" + "\n".join(json.dumps(example) for example in shuffled_examples)
+      prompt += "\nGenerate a single data point as a JSON object."
+      return prompt
 
-        if self.generated_data:
-            prompt += "\n\nRecently generated data (generate something significantly different):\n"
-            prompt += "\n".join(json.dumps(data) for data in self.generated_data[-3:])
-
-        prompt += ("\n\nGenerate a single, unique data point as a JSON object. Be creative and ensure high diversity "
-                   "while staying realistic.")
-        return prompt
 
     def _is_diverse(self, new_data: Dict[str, Any]) -> bool:
         """Check if the new data point is diverse compared to existing data."""
