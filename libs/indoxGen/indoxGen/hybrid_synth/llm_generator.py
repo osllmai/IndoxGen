@@ -1,6 +1,7 @@
 import json
 import re
 from typing import List, Dict, Any, Optional
+import random
 from collections import defaultdict
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -15,7 +16,7 @@ logger.add(sys.stdout, format="<green>{level}</green>: <level>{message}</level>"
 logger.add(sys.stdout, format="<red>{level}</red>: <level>{message}</level>", level="ERROR")
 
 
-class LLMGenerator:
+class TextDataGeneratotr:
     """
     A class for generating synthetic data based on example data and user instructions.
 
@@ -64,7 +65,7 @@ class LLMGenerator:
         self.max_diversity_failures = max_diversity_failures
         self.diversity_failure_count = 0
         self.verbose = verbose
-        self.diversity_check_window = 5  # New parameter for rolling window size
+        self.diversity_check_window = 10  # New parameter for rolling window size
 
     def generate_data(self, num_samples: int) -> pd.DataFrame:
         """
@@ -175,34 +176,35 @@ class LLMGenerator:
         return dict(stats)
 
     def _create_generation_prompt(self, context=None) -> str:
-      """Create a prompt for the generator LLM."""
+      """
+      Create a prompt for generating text that uses the numerical context.
+      """
       prompt = f"Generate a synthetic data point with the following text columns: {', '.join(self.columns)}.\n"
       prompt += f"User instruction: {self.user_instruction}\n"
       prompt += (
-          "Ensure that the generated text is realistic, diverse, and does not repeat previous outputs.\n"
-          "Be creative and vary the language used in the 'remarks' field.\n"
-          "Avoid using the same phrases or sentences as in the examples or previous data points.\n\n"
+          "Ensure that the generated text is coherent with the provided numerical data. "
+          "Each output should be realistic and diverse, and significantly different from previous outputs.\n"
+          "Vary the language used in the 'remarks' field significantly.\n\n"
       )
 
       if context:
-          prompt += "Context numerical data:\n"
+          prompt += "Numerical context for this data point:\n"
           for key, value in context.items():
               prompt += f"- {key}: {value}\n"
-          prompt += "\nEnsure the generated text data is coherent with the numerical context.\n"
+          prompt += "\nEnsure the generated text aligns with this numerical context.\n"
 
-      # Add examples if available
       if self.example_data:
           prompt += "\nHere are some example data points:\n"
           for example in self.example_data[:5]:
-              # Include numerical context in the examples
               example_context = {k: v for k, v in example.items() if k not in self.columns}
               prompt += "Example Context:\n"
               for key, value in example_context.items():
                   prompt += f"- {key}: {value}\n"
               prompt += f"Example Text Data: {json.dumps({col: example[col] for col in self.columns})}\n\n"
 
-      prompt += "\nGenerate a single data point as a JSON object."
+      prompt += "\nGenerate a single data point as a JSON object. Ensure the text reflects the provided numerical data."
       return prompt
+
 
 
     def _is_diverse(self, new_data: Dict[str, Any]) -> bool:
