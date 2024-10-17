@@ -16,7 +16,7 @@ logger.add(sys.stdout, format="<green>{level}</green>: <level>{message}</level>"
 logger.add(sys.stdout, format="<red>{level}</red>: <level>{message}</level>", level="ERROR")
 
 
-class TextDataGeneratotr:
+class TextDataGenerator:
     """
     A class for generating synthetic data based on example data and user instructions.
 

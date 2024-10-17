@@ -1,7 +1,6 @@
 loguru==0.7.2
-mistralai==1.1.0
-numpy==2.1.2
-pandas==2.2.3
+numpy==1.24.4
+pandas==2.2.2
 protobuf==3.20.3
 Requests==2.32.3
 scikit_learn==1.4.2

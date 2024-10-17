@@ -1,15 +1,20 @@
 import pandas as pd
 from typing import List, Dict, Any
 import warnings
+
+from .llm_generator import TextDataGenerator
+
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 # Import handling for TabularGANConfig and TabularGANTrainer
 try:
     from indoxGen_tensor import TabularGANConfig, TabularGANTrainer
+
     print("Successfully imported TabularGANConfig and TabularGANTrainer from indoxGen_tensor.")
 except ImportError:
     try:
         from indoxGen_torch import TabularGANConfig, TabularGANTrainer
+
         print("Successfully imported TabularGANConfig and TabularGANTrainer from indoxGen_torch.")
     except ImportError:
         raise ImportError(
@@ -17,16 +22,17 @@ except ImportError:
             "Please install one of these packages to proceed."
         )
 
+
 # Define the LLM initialization function
 def initialize_llm_synth(
-    generator_llm,
-    judge_llm,
-    columns: List[str],
-    example_data: List[Dict[str, Any]],
-    user_instruction: str,
-    diversity_threshold: float = 0.5,  # Adjusted for higher diversity
-    max_diversity_failures: int = 30,
-    verbose: int = 1
+        generator_llm,
+        judge_llm,
+        columns: List[str],
+        example_data: List[Dict[str, Any]],
+        user_instruction: str,
+        diversity_threshold: float = 0.5,  # Adjusted for higher diversity
+        max_diversity_failures: int = 30,
+        verbose: int = 1
 ):
     """
     Initializes the LLM-based synthetic text generator setup.
@@ -66,22 +72,23 @@ def initialize_llm_synth(
         verbose=verbose
     )
 
+
 # Define the GAN initialization function
 def initialize_gan_synth(
-    input_dim: int,
-    generator_layers: List[int],
-    discriminator_layers: List[int],
-    learning_rate: float,
-    beta_1: float,
-    beta_2: float,
-    batch_size: int,
-    epochs: int,
-    n_critic: int,
-    categorical_columns: List[str],
-    mixed_columns: Dict[str, Any],
-    integer_columns: List[str],
-    data: pd.DataFrame,
-    device: str = 'cpu'
+        input_dim: int,
+        generator_layers: List[int],
+        discriminator_layers: List[int],
+        learning_rate: float,
+        beta_1: float,
+        beta_2: float,
+        batch_size: int,
+        epochs: int,
+        n_critic: int,
+        categorical_columns: List[str],
+        mixed_columns: Dict[str, Any],
+        integer_columns: List[str],
+        data: pd.DataFrame,
+        device: str = 'cpu'
 ):
     """
     Initializes the GAN setup for generating numerical data.
@@ -142,12 +149,14 @@ def initialize_gan_synth(
     trainer.train(data, patience=15, verbose=1)
     return trainer
 
+
 # Define the main pipeline class that integrates both the LLM and GAN setups
 class TextTabularSynth:
     """
     A class to generate synthetic data combining GAN for numerical data
     and LLM for text data.
     """
+
     def __init__(self, tabular: TabularGANTrainer, text: TextDataGeneratotr):
         """
         Initializes the TextTabularSynth pipeline.
