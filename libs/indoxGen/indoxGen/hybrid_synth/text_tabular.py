@@ -1,32 +1,54 @@
 import pandas as pd
 from typing import List, Dict, Any
 import warnings
+
+from .llm_generator import TextDataGenerator
+
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
-# Import handling for TabularGANConfig and TabularGANTrainer
-try:
-    from indoxGen_tensor import TabularGANConfig, TabularGANTrainer
-    print("Successfully imported TabularGANConfig and TabularGANTrainer from indoxGen_tensor.")
-except ImportError:
+
+def get_gan_module(prefer_tensor: bool = True):
+    """
+    Attempt to import the preferred GAN module, falling back to the other if necessary.
+
+    Parameters:
+    -----------
+    prefer_tensor : bool, optional
+        If True, try to import indoxGen_tensor first; otherwise, try indoxGen_torch first.
+
+    Returns:
+    --------
+    module, bool
+        The imported module and a boolean indicating if it's the tensor version.
+    """
+    first_choice, second_choice = (
+        ("indoxGen_tensor", "indoxGen_torch") if prefer_tensor else ("indoxGen_torch", "indoxGen_tensor")
+    )
+
     try:
-        from indoxGen_torch import TabularGANConfig, TabularGANTrainer
-        print("Successfully imported TabularGANConfig and TabularGANTrainer from indoxGen_torch.")
+        module = __import__(first_choice)
+        return module, first_choice == "indoxGen_tensor"
     except ImportError:
-        raise ImportError(
-            "Neither `indoxGen_tensor` nor `indoxGen_torch` is installed. "
-            "Please install one of these packages to proceed."
-        )
+        try:
+            module = __import__(second_choice)
+            return module, second_choice == "indoxGen_tensor"
+        except ImportError:
+            raise ImportError(
+                f"Neither `{first_choice}` nor `{second_choice}` is installed. "
+                "Please install one of these packages to proceed."
+            )
+
 
 # Define the LLM initialization function
 def initialize_llm_synth(
-    generator_llm,
-    judge_llm,
-    columns: List[str],
-    example_data: List[Dict[str, Any]],
-    user_instruction: str,
-    diversity_threshold: float = 0.5,  # Adjusted for higher diversity
-    max_diversity_failures: int = 30,
-    verbose: int = 1
+        generator_llm,
+        judge_llm,
+        columns: List[str],
+        example_data: List[Dict[str, Any]],
+        user_instruction: str,
+        diversity_threshold: float = 0.5,  # Adjusted for higher diversity
+        max_diversity_failures: int = 30,
+        verbose: int = 1
 ):
     """
     Initializes the LLM-based synthetic text generator setup.
@@ -66,22 +88,26 @@ def initialize_llm_synth(
         verbose=verbose
     )
 
+
 # Define the GAN initialization function
 def initialize_gan_synth(
-    input_dim: int,
-    generator_layers: List[int],
-    discriminator_layers: List[int],
-    learning_rate: float,
-    beta_1: float,
-    beta_2: float,
-    batch_size: int,
-    epochs: int,
-    n_critic: int,
-    categorical_columns: List[str],
-    mixed_columns: Dict[str, Any],
-    integer_columns: List[str],
-    data: pd.DataFrame,
-    device: str = 'cpu'
+        input_dim: int,
+        generator_layers: List[int],
+        discriminator_layers: List[int],
+        learning_rate: float,
+        beta_1: float,
+        beta_2: float,
+        batch_size: int,
+        epochs: int,
+        n_critic: int,
+        categorical_columns: List[str],
+        mixed_columns: Dict[str, Any],
+        integer_columns: List[str],
+        data: pd.DataFrame,
+        device: str = 'cpu',
+        prefer_tensor: bool = True,
+        patience: int = 15,
+        verbose: int = 1
 ):
     """
     Initializes the GAN setup for generating numerical data.
@@ -115,32 +141,57 @@ def initialize_gan_synth(
     data : pd.DataFrame
         The dataset containing numerical columns to train the GAN.
     device : str, optional
-        Device to run the GAN ('cpu' or 'cuda').
+        Device to run the GAN ('cpu' or 'cuda'). Only used for indoxGen_torch.
+    prefer_tensor : bool, optional
+        If True, prefer using indoxGen_tensor; if False, prefer indoxGen_torch.
+    patience : int, optional
+        Number of epochs with no improvement after which training will be stopped.
+    verbose : int, optional
+        Verbosity mode. 0 = silent, 1 = progress bar, 2 = one line per epoch.
 
     Returns:
     --------
     TabularGANTrainer
         Instance of the initialized GAN setup.
     """
-    trainer = TabularGANTrainer(
-        config=TabularGANConfig(
-            input_dim=input_dim,
-            generator_layers=generator_layers,
-            discriminator_layers=discriminator_layers,
-            learning_rate=learning_rate,
-            beta_1=beta_1,
-            beta_2=beta_2,
-            batch_size=batch_size,
-            epochs=epochs,
-            n_critic=n_critic
-        ),
-        categorical_columns=categorical_columns,
-        mixed_columns=mixed_columns,
-        integer_columns=integer_columns,
-        device=device
+    gan_module, using_tensor = get_gan_module(prefer_tensor)
+    TabularGANConfig = gan_module.TabularGANConfig
+    TabularGANTrainer = gan_module.TabularGANTrainer
+
+    # Prepare the configuration
+    config = TabularGANConfig(
+        input_dim=input_dim,
+        generator_layers=generator_layers,
+        discriminator_layers=discriminator_layers,
+        learning_rate=learning_rate,
+        beta_1=beta_1,
+        beta_2=beta_2,
+        batch_size=batch_size,
+        epochs=epochs,
+        n_critic=n_critic
     )
-    trainer.train(data, patience=15, verbose=1)
+
+    # Initialize the trainer with or without the device parameter
+    if using_tensor:
+        trainer = TabularGANTrainer(
+            config=config,
+            categorical_columns=categorical_columns,
+            mixed_columns=mixed_columns,
+            integer_columns=integer_columns
+        )
+    else:  # using indoxGen_torch
+        trainer = TabularGANTrainer(
+            config=config,
+            categorical_columns=categorical_columns,
+            mixed_columns=mixed_columns,
+            integer_columns=integer_columns,
+            device=device
+        )
+
+    # Train the model with the specified patience and verbosity
+    trainer.train(data, patience=patience, verbose=verbose)
     return trainer
+
 
 # Define the main pipeline class that integrates both the LLM and GAN setups
 class TextTabularSynth:
@@ -148,15 +199,16 @@ class TextTabularSynth:
     A class to generate synthetic data combining GAN for numerical data
     and LLM for text data.
     """
-    def __init__(self, tabular: TabularGANTrainer, text: TextDataGeneratotr):
+
+    def __init__(self, tabular, text: TextDataGenerator):
         """
         Initializes the TextTabularSynth pipeline.
 
         Parameters:
         -----------
-        tabular : TabularGANTrainer
+        tabular :
             Instance of the initialized GAN trainer for numerical data.
-        text : TextDataGeneratotr
+        text : TextDataGenerator
             Instance of the initialized synthetic text generator.
         """
         self.tabular = tabular
