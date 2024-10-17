@@ -1,3 +1,4 @@
+
 # IndoxGen: Comprehensive Synthetic Data Generation Framework
 
 [![License](https://img.shields.io/github/license/osllmai/indoxGen)](https://github.com/osllmai/IndoxGen/tree/master/libs/indoxGen/LICENSE)
@@ -16,10 +17,11 @@
 
 ## Overview
 
-IndoxGen is a state-of-the-art, enterprise-ready framework designed for generating high-fidelity synthetic data. It consists of two main components:
+IndoxGen is a state-of-the-art, enterprise-ready framework designed for generating high-fidelity synthetic data. It consists of three main components:
 
-1. **IndoxGen Core**: Leverages advanced AI technologies, including Large Language Models (LLMs) and human feedback loops, for flexible and precise synthetic data creation.
-2. **IndoxGen-Tensor**: Utilizes Generative Adversarial Networks (GANs) powered by TensorFlow for generating complex tabular data.
+1. **IndoxGen Core** (v0.0.9): Leverages advanced AI technologies, including Large Language Models (LLMs) and human feedback loops, for flexible and precise synthetic data creation.
+2. **IndoxGen-Tensor** (v0.1.0): Utilizes Generative Adversarial Networks (GANs) powered by TensorFlow for generating complex tabular data.
+3. **IndoxGen-Torch** (v0.0.5): A PyTorch-powered version for synthetic data generation with GANs, offering a seamless alternative for PyTorch users.
 
 Together, these components offer a comprehensive solution for synthetic data generation across various domains and use cases.
 
@@ -27,16 +29,16 @@ Together, these components offer a comprehensive solution for synthetic data gen
 
 ### 1. IndoxGen
 
-[![PyPI](https://badge.fury.io/py/indoxGen.svg)](https://pypi.org/project/indoxGen/0.0.3/)
+[![PyPI](https://badge.fury.io/py/indoxGen.svg)](https://pypi.org/project/indoxGen/)
 [![Downloads](https://static.pepy.tech/badge/indoxGen)](https://pepy.tech/project/indoxGen)
 
 Key Features:
-- Multiple generation pipelines (SyntheticDataGenerator, SyntheticDataGeneratorHF, DataFromPrompt)
-- Human-in-the-loop feedback integration
-- AI-driven diversity ensuring representative datasets
-- Flexible I/O supporting various data sources and export formats
-- Advanced learning techniques including few-shot learning
-
+- Hybrid synthesis combining Large Language Models (LLMs) and GANs for text and tabular data generation.
+- Multiple generation pipelines (SyntheticDataGenerator, SyntheticDataGeneratorHF, DataFromPrompt).
+- Human-in-the-loop feedback integration.
+- AI-driven diversity ensuring representative datasets.
+- Flexible I/O supporting various data sources and export formats.
+- Advanced learning techniques including few-shot learning.
 
 ### 2. IndoxGen-Tensor
 
@@ -44,34 +46,30 @@ Key Features:
 [![Downloads](https://static.pepy.tech/badge/indoxGen-tensor)](https://pepy.tech/project/indoxGen-tensor)
 
 Key Features:
-- GAN-based generation for high-fidelity synthetic data
-- TensorFlow integration for efficient, GPU-accelerated training
-- Flexible data handling supporting categorical, mixed, and integer columns
-- Customizable GAN architecture
-- Scalable generation for large volumes of synthetic data
-
+- GAN-based generation for high-fidelity synthetic data.
+- TensorFlow integration for efficient, GPU-accelerated training.
+- Flexible data handling supporting categorical, mixed, and integer columns.
+- Customizable GAN architecture.
+- Scalable generation for large volumes of synthetic data.
 
 ### 3. IndoxGen-Torch
 
-[![PyPI](https://badge.fury.io/py/indoxGen-tensor.svg)](https://pypi.org/project/indoxGen-tensor/)
-[![Downloads](https://static.pepy.tech/badge/indoxGen-tensor)](https://pepy.tech/project/indoxGen-tensor)
+[![PyPI](https://badge.fury.io/py/indoxGen-torch.svg)](https://pypi.org/project/indoxGen-torch/)
+[![Downloads](https://static.pepy.tech/badge/indoxGen-torch)](https://pepy.tech/project/indoxGen-torch)
 
 Key Features:
-- GAN-based generation for high-fidelity synthetic data
-- PyTorch integration for efficient, GPU-accelerated training
-- Flexible data handling supporting categorical, mixed, and integer columns
-- Customizable GAN architecture
-- Scalable generation for large volumes of synthetic data
-
-
-
+- GAN-based generation for high-fidelity synthetic data.
+- PyTorch integration for efficient, GPU-accelerated training.
+- Flexible data handling supporting categorical, mixed, and integer columns.
+- Customizable GAN architecture.
+- Scalable generation for large volumes of synthetic data.
 
 ## Installation
 
-To install both components:
+To install all components:
 
 ```bash
-pip install indoxgen indoxgen-tensor
+pip install indoxgen indoxgen-tensor indoxgen-torch
 ```
 
 Or install them separately:
@@ -79,6 +77,7 @@ Or install them separately:
 ```bash
 pip install indoxgen
 pip install indoxgen-tensor
+pip install indoxgen-torch
 ```
 
 ## Quick Start Guide
@@ -147,31 +146,30 @@ history = trainer.train(data, patience=15)
 synthetic_data = trainer.generate_samples(50000)
 ```
 
-
 ## Use Cases
 
-- Data Augmentation for Machine Learning
-- Privacy-Preserving Data Sharing
-- Software Testing and Quality Assurance
-- Scenario Planning and Simulation
-- Balancing Imbalanced Datasets
+- Data Augmentation for Machine Learning.
+- Privacy-Preserving Data Sharing.
+- Software Testing and Quality Assurance.
+- Scenario Planning and Simulation.
+- Balancing Imbalanced Datasets.
 
 ## Roadmap
 
-- [x] Integrate IndoxGen and IndoxGen-Tensor for seamless workflow
-- [ ] Develop a unified web-based UI for both components
-- [ ] Implement advanced privacy-preserving techniques across both modules
-- [ ] Extend support to more data types (images, time series, etc.)
-- [ ] Create a plugin system for custom data generation rules
-- [ ] Develop comprehensive documentation and tutorials covering both components
+- [x] Integrate IndoxGen, IndoxGen-Tensor, and IndoxGen-Torch for seamless workflows.
+- [ ] Develop a unified web-based UI for all components.
+- [ ] Implement advanced privacy-preserving techniques across all modules.
+- [ ] Extend support to more data types (images, time series, etc.).
+- [ ] Create a plugin system for custom data generation rules.
+- [ ] Develop comprehensive documentation and tutorials covering all components.
 
 ## Contributing
 
-We welcome contributions to both IndoxGen Core and IndoxGen-Tensor! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) file for details on how to get started.
+We welcome contributions to all components of IndoxGen! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) file for details on how to get started.
 
 ## License
 
-Both IndoxGen Core and IndoxGen-Tensor are released under the MIT License. See [LICENSE.md](LICENSE.md) for more details.
+All components of IndoxGen are released under the AGPL License. See [LICENSE.md](LICENSE.md) for more details.
 
 ---
 
