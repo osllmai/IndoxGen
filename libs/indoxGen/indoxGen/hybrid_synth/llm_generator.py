@@ -1,7 +1,6 @@
 import json
 import re
 from typing import List, Dict, Any, Optional
-import random
 from collections import defaultdict
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
