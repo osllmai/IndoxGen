@@ -157,7 +157,7 @@ class TextTabularSynth:
     and LLM for text data.
     """
 
-    def __init__(self, tabular: TabularGANTrainer, text: TextDataGeneratotr):
+    def __init__(self, tabular: TabularGANTrainer, text: TextDataGenerator):
         """
         Initializes the TextTabularSynth pipeline.
 
@@ -165,7 +165,7 @@ class TextTabularSynth:
         -----------
         tabular : TabularGANTrainer
             Instance of the initialized GAN trainer for numerical data.
-        text : TextDataGeneratotr
+        text : TextDataGenerator
             Instance of the initialized synthetic text generator.
         """
         self.tabular = tabular
