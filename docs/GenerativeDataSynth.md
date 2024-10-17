@@ -1,8 +1,8 @@
-# SyntheticDataGenerator
+# GenerativeDataSynth
 
 ## Overview
 
-`SyntheticDataGenerator` is a Python class designed for generating synthetic data based on example data and user instructions. It utilizes language models to generate and judge synthetic data points, ensuring diversity and adherence to specified criteria.
+`GenerativeDataSynth` is a Python class designed for generating synthetic data based on example data and user instructions. It utilizes language models to generate and judge synthetic data points, ensuring diversity and adherence to specified criteria.
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@
 
 ## Installation
 
-To use the `SyntheticDataGenerator`, you need to have Python 3.9+ installed. You can install the package using pip:
+To use the `GenerativeDataSynth`, you need to have Python 3.9+ installed. You can install the package using pip:
 
 ```bash
 pip install indoxGen
@@ -24,7 +24,7 @@ pip install indoxGen
 
 ## Language Model Setup
 
-The `SyntheticDataGenerator` requires two language models: one for generating data and another for judging data quality. The `indoxGen` library provides a unified interface for various language models. Here's how to set up the language models:
+The `GenerativeDataSynth` requires two language models: one for generating data and another for judging data quality. The `indoxGen` library provides a unified interface for various language models. Here's how to set up the language models:
 
 ```python
 from indoxGen.llms import OpenAi
@@ -46,14 +46,14 @@ The `indoxGen` library supports various models including:
 
 Additionally, `indoxGen` provides a router for OpenAI, allowing for easy switching between different models.
 
-When initializing the `SyntheticDataGenerator`, you'll pass these language model instances as the `generator_llm` and `judge_llm` parameters.
+When initializing the `GenerativeDataSynth`, you'll pass these language model instances as the `generator_llm` and `judge_llm` parameters.
 
 ## Usage
 
-Here's a basic example of how to use the `SyntheticDataGenerator`:
+Here's a basic example of how to use the `GenerativeDataSynth`:
 
 ```python
-from indoxGen.synthCore import SyntheticDataGenerator
+from indoxGen.synthCore import GenerativeDataSynth
 from indoxGen.llms import OpenAi
 
 # Setup language models
@@ -68,7 +68,7 @@ example_data = [
 ]
 user_instruction = "Generate diverse fictional employee data"
 
-generator = SyntheticDataGenerator(
+generator = GenerativeDataSynth(
     generator_llm=generator_llm,
     judge_llm=judge_llm,
     columns=columns,
@@ -82,11 +82,11 @@ print(synthetic_data)
 
 ## API Reference
 
-### SyntheticDataGenerator
+### GenerativeDataSynth
 
 #### `__init__(self, generator_llm, judge_llm, columns, example_data, user_instruction, real_data=None, diversity_threshold=0.7, max_diversity_failures=20, verbose=0)`
 
-Initialize the SyntheticDataGenerator.
+Initialize the GenerativeDataSynth.
 
 - `generator_llm`: Language model for generating data.
 - `judge_llm`: Language model for judging data quality.
@@ -117,7 +117,7 @@ example_data = [
 ]
 user_instruction = "Generate diverse employee data for a tech company"
 
-generator = SyntheticDataGenerator(
+generator = GenerativeDataSynth(
     generator_llm=your_generator_llm,
     judge_llm=your_judge_llm,
     columns=columns,
@@ -132,7 +132,7 @@ print(employee_data.head())
 
 ## Contributing
 
-Contributions to improve `SyntheticDataGenerator` are welcome. Please follow these steps:
+Contributions to improve `GenerativeDataSynth` are welcome. Please follow these steps:
 
 1. Fork the repository.
 2. Create a new branch for your feature.

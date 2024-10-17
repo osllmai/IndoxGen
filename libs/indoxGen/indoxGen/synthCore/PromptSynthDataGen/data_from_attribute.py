@@ -11,7 +11,7 @@ logger.add(sys.stdout, format="<green>{level}</green>: <level>{message}</level>"
 logger.add(sys.stderr, format="<red>{level}</red>: <level>{message}</level>", level="ERROR")
 
 
-class DataFromAttributedPrompt:
+class AttributePromptSynth:
     """
     Generates data from a given LLM based on attributes and user instructions,
     focusing on concise sentence output.

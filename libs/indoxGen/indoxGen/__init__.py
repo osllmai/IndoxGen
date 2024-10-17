@@ -2,5 +2,5 @@
 
 import importlib.metadata
 
-__version__ = importlib.metadata.version("IndoxGen")
+__version__ = importlib.metadata.version("indoxGen")
 

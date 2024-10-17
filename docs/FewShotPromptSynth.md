@@ -1,8 +1,8 @@
 
-# FewShotPrompt
+# FewShotPromptSynth
 
 ## Overview
-**FewShotPrompt** is a Python class designed for generating synthetic data based on few-shot learning examples and user-provided instructions. It utilizes language models to generate diverse datasets, leveraging pre-existing examples for guidance. The class supports outputting the generated data as a pandas DataFrame and allows saving the results to an Excel file.
+**FewShotPromptSynth** is a Python class designed for generating synthetic data based on few-shot learning examples and user-provided instructions. It utilizes language models to generate diverse datasets, leveraging pre-existing examples for guidance. The class supports outputting the generated data as a pandas DataFrame and allows saving the results to an Excel file.
 
 ## Table of Contents
 - [Installation](#installation)
@@ -13,14 +13,14 @@
 - [Contributing](#contributing)
 
 ## Installation
-To use **FewShotPrompt**, you need to have Python 3.9+ installed. You can install the required package using pip:
+To use **FewShotPromptSynth**, you need to have Python 3.9+ installed. You can install the required package using pip:
 
 ```bash
 pip install indoxGen
 ```
 
 ## Language Model Setup
-**FewShotPrompt** requires a language model for generating synthetic data. The `indoxGen` library provides a unified interface for various language models. Here's how to set up a language model for use in the class:
+**FewShotPromptSynth** requires a language model for generating synthetic data. The `indoxGen` library provides a unified interface for various language models. Here's how to set up a language model for use in the class:
 
 ```python
 from indoxGen.llms import IndoxApi
@@ -39,10 +39,10 @@ The **indoxGen** library supports various models, including:
 Additionally, **indoxGen** provides a router for OpenAI, allowing for easy switching between different models.
 
 ## Usage
-Here's a basic example of how to use **FewShotPrompt**:
+Here's a basic example of how to use **FewShotPromptSynth**:
 
 ```python
-from indoxGen.synthCore import FewShotPrompt
+from indoxGen.synthCore import FewShotPromptSynth
 # Define your Language Model (LLM) instance (replace with the actual LLM you're using)
 LLM = IndoxApi(api_key=INDOX_API_KEY)
 
@@ -61,8 +61,8 @@ examples = [
     }
 ]
 
-# Create an instance of FewShotPrompt using the defined LLM, user prompt, and few-shot examples
-data_generator = FewShotPrompt(
+# Create an instance of FewShotPromptSynth using the defined LLM, user prompt, and few-shot examples
+data_generator = FewShotPromptSynth(
     llm=LLM,                            # Language model instance (LLM)
     user_instruction=user_prompt,        # Main user instruction or query
     examples=examples,                   # Few-shot input-output examples
@@ -76,12 +76,12 @@ df = data_generator.generate_data()
 
 ## API Reference
 
-### FewShotPrompt
+### FewShotPromptSynth
 
 ```python
 def __init__(self, prompt_name: str, args: dict, outputs: dict, examples: List[Dict[str, str]]):
 ```
-Initializes the **FewShotPrompt** class.
+Initializes the **FewShotPromptSynth** class.
 
 
 ```python
@@ -95,7 +95,7 @@ Saves the generated DataFrame to an Excel file.
 
 
 ## Contributing
-Contributions to improve **FewShotPrompt** are welcome. Please follow these steps:
+Contributions to improve **FewShotPromptSynth** are welcome. Please follow these steps:
 
 1. Fork the repository.
 2. Create a new branch for your feature.

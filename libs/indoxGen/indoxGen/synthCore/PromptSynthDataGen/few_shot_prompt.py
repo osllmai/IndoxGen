@@ -15,7 +15,7 @@ logger.add(sys.stdout, format="<green>{level}</green>: <level>{message}</level>"
 logger.add(sys.stderr, format="<red>{level}</red>: <level>{message}</level>", level="ERROR")
 
 
-class FewShotPrompt:
+class FewShotPromptSynth:
     """
     Generates outputs from a given LLM based on few-shot examples and a user setup.
     """

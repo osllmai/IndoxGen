@@ -18,7 +18,7 @@ logger.add(sys.stdout, format="<green>{level}</green>: <level>{message}</level>"
 logger.add(sys.stderr, format="<red>{level}</red>: <level>{message}</level>", level="ERROR")
 
 
-class SyntheticDataGeneratorHF:
+class InteractiveFeedbackSynth:
     def __init__(
             self,
             generator_llm: Any,
