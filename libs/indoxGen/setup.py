@@ -13,7 +13,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='indoxGen',
-    version='0.0.7',
+    version='0.0.8',
     license='AGPL-3.0-or-later',
     packages=find_packages(),
     include_package_data=True,
@@ -31,16 +31,7 @@ setup(
         'machine learning',
         'NLP'
     ],
-    install_requires=[
-        'loguru==0.7.2',
-        'numpy==2.1.1',
-        'pandas==2.2.3',
-        'protobuf==3.20.3',
-        'requests==2.32.3',
-        'scikit_learn==1.4.2',
-        'setuptools==69.5.1',
-        'tenacity==8.2.2',
-    ],
+
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
