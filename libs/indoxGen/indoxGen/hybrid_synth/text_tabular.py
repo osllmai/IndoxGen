@@ -1,8 +1,8 @@
 import pandas as pd
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import warnings
 
-from .llm_generator import TextDataGenerator
+from ..synthCore import GenerativeDataSynth
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
@@ -42,13 +42,14 @@ def get_gan_module(prefer_tensor: bool = True):
 # Define the LLM initialization function
 def initialize_llm_synth(
         generator_llm,
-        judge_llm,
         columns: List[str],
         example_data: List[Dict[str, Any]],
         user_instruction: str,
-        diversity_threshold: float = 0.5,  # Adjusted for higher diversity
-        max_diversity_failures: int = 30,
-        verbose: int = 1
+        judge_llm: Optional[Any] = None,
+        real_data: Optional[List[Dict[str, Any]]] = None,
+        diversity_threshold: float = 0.7,
+        max_diversity_failures: int = 20,
+        verbose: int = 0
 ):
     """
     Initializes the LLM-based synthetic text generator setup.
@@ -77,7 +78,7 @@ def initialize_llm_synth(
     SyntheticDataGenerator
         Instance of the initialized synthetic data generator.
     """
-    return TextDataGenerator(
+    return GenerativeDataSynth(
         generator_llm=generator_llm,
         judge_llm=judge_llm,
         columns=columns,
@@ -85,6 +86,7 @@ def initialize_llm_synth(
         user_instruction=user_instruction,
         diversity_threshold=diversity_threshold,
         max_diversity_failures=max_diversity_failures,
+        real_data=real_data,
         verbose=verbose
     )
 
@@ -200,7 +202,7 @@ class TextTabularSynth:
     and LLM for text data.
     """
 
-    def __init__(self, tabular, text: TextDataGenerator):
+    def __init__(self, tabular, text: GenerativeDataSynth):
         """
         Initializes the TextTabularSynth pipeline.
 
@@ -232,22 +234,10 @@ class TextTabularSynth:
         synthetic_numerical_data = self.tabular.generate_samples(num_samples)
 
         # 2. Generate synthetic text data using the LLM with numerical context
-        synthetic_text_data_list = []
-        for idx in range(num_samples):
-            # Extract numerical context from the generated numerical data
-            numerical_context = synthetic_numerical_data.iloc[idx].to_dict()
-
-            # Generate corresponding text data based on the numerical context
-            generated_text = self.text._generate_single_data_point(context=numerical_context)
-
-            if generated_text and all(col in generated_text for col in self.text.columns):
-                synthetic_text_data_list.append(generated_text)
-            else:
-                # Handle cases where text generation fails
-                synthetic_text_data_list.append({col: '' for col in self.text.columns})
+        synthetic_text_data = self.text.generate_data(num_samples=num_samples)
 
         # Convert the list of generated text data to a DataFrame
-        synthetic_text_data = pd.DataFrame(synthetic_text_data_list)
+        # synthetic_text_data = pd.DataFrame(synthetic_text_data_list)
 
         # 3. Combine the numerical and text data into a single DataFrame
         synthetic_numerical_data.reset_index(drop=True, inplace=True)

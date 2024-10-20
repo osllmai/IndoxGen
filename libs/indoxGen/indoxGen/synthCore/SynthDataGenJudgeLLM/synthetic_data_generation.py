@@ -20,31 +20,31 @@ class GenerativeDataSynth:
     """
     A class for generating synthetic data based on example data and user instructions.
 
-    This class uses language models to generate and judge synthetic data points,
-    ensuring diversity and adherence to specified criteria.
+    This class uses language models to generate synthetic data points,
+    ensuring diversity and adherence to specified criteria. The LLM judge is optional.
     """
 
     def __init__(
             self,
             generator_llm,
-            judge_llm,
             columns: List[str],
             example_data: List[Dict[str, Any]],
             user_instruction: str,
+            judge_llm: Optional[Any] = None,
             real_data: Optional[List[Dict[str, Any]]] = None,
             diversity_threshold: float = 0.7,
             max_diversity_failures: int = 20,
             verbose: int = 0
     ):
         """
-        Initialize the SyntheticDataGenerator.
+        Initialize the GenerativeDataSynth.
 
         Args:
             generator_llm: Language model for generating data.
-            judge_llm: Language model for judging data quality.
             columns: List of column names for the synthetic data.
             example_data: List of example data points.
             user_instruction: Instruction for data generation.
+            judge_llm: Optional language model for judging data quality.
             real_data: Optional list of real data points.
             diversity_threshold: Threshold for determining data diversity.
             max_diversity_failures: Maximum number of diversity failures before forcing acceptance.
@@ -64,7 +64,7 @@ class GenerativeDataSynth:
         self.max_diversity_failures = max_diversity_failures
         self.diversity_failure_count = 0
         self.verbose = verbose
-        self.diversity_check_window = 5  # New parameter for rolling window size
+        self.diversity_check_window = 5  # Parameter for rolling window size
 
     def generate_data(self, num_samples: int) -> pd.DataFrame:
         """
@@ -85,14 +85,19 @@ class GenerativeDataSynth:
             if not generated:
                 continue
 
-            score = self._judge_data_point(generated)
+            if self.judge_llm:
+                score = self._judge_data_point(generated)
+                accept_threshold = self.diversity_threshold
+            else:
+                score = 1.0
+                accept_threshold = 0.0
 
-            if score >= 0.6 and self._is_diverse(generated):
+            if score >= accept_threshold and self._is_diverse(generated):
                 self.generated_data.append(generated)
                 self.diversity_failure_count = 0
                 if self.verbose >= 1:
                     logger.info(f"Generated data point: {generated}")
-            elif score >= 0.6:
+            elif score >= accept_threshold:
                 self._handle_diversity_failure(generated)
             else:
                 self._inform_generator(generated, score, "Low score")
@@ -151,6 +156,26 @@ class GenerativeDataSynth:
             logger.warning("Max attempts reached. Skipping this data point.")
         return {}
 
+
+    def _judge_data_point(self, data: Dict[str, Any]) -> float:
+        """Judge the quality of a generated data point."""
+        if not self.judge_llm:
+            return 1.0  # Return perfect score if no judge LLM is provided
+
+        system_prompt = ("You are a data quality judge. Evaluate the given data based on the criteria and return a "
+                         "score between 0 and 1. It's important to only send score without any description")
+        criteria = self._create_judge_criteria()
+        prompt = (f"Data to evaluate: {json.dumps(data)}\n\nCriteria:\n{criteria}\n\nProvide a numeric score between 0 "
+                  f"and 1.")
+
+        score_str = self.judge_llm.chat(prompt, system_prompt=system_prompt)
+        try:
+            return float(score_str)
+        except ValueError:
+            if self.verbose >= 1:
+                logger.error(f"Failed to parse judge score: {score_str}")
+            return 0.5
+
     def _calculate_column_stats(self) -> Dict[str, Dict[str, Any]]:
         """Calculate statistics for each column in the dataset."""
         stats = defaultdict(lambda: {'min': float('inf'), 'max': float('-inf'), 'mean': 0, 'unique_values': set()})
@@ -181,12 +206,12 @@ class GenerativeDataSynth:
         prompt += ("The data should be realistic and inspired by the given examples, but with substantial "
                    "variations.\n\n")
 
-        prompt += "Statistical information for numerical columns (use as a guide, not strict rules):\n"
+        prompt += "if there is any Statistical information for numerical columns (use as a guide, not strict rules):\n"
         prompt += "\n".join(
             f"{col}: min={stats['min']}, max={stats['max']}, mean={stats['mean']:.2f}, std={stats['std']:.2f}"
             for col, stats in self.column_stats.items() if 'mean' in stats)
 
-        prompt += "\n\nExample values for categorical columns:\n"
+        prompt += "\n\nExample values for categorical columns :\n"
         prompt += "\n".join(f"{col}: {', '.join(list(stats['unique_values'])[:10])}"
                             for col, stats in self.column_stats.items() if 'unique_values' in stats)
 
@@ -244,22 +269,6 @@ class GenerativeDataSynth:
             self.diversity_threshold += 0.05
             if self.verbose >= 1:
                 logger.info(f"Increased diversity threshold to {self.diversity_threshold}")
-
-    def _judge_data_point(self, data: Dict[str, Any]) -> float:
-        """Judge the quality of a generated data point."""
-        system_prompt = ("You are a data quality judge. Evaluate the given data based on the criteria and return a "
-                         "score between 0 and 1. It's important to only send score without any description")
-        criteria = self._create_judge_criteria()
-        prompt = (f"Data to evaluate: {json.dumps(data)}\n\nCriteria:\n{criteria}\n\nProvide a numeric score between 0 "
-                  f"and 1.")
-
-        score_str = self.judge_llm.chat(prompt, system_prompt=system_prompt)
-        try:
-            return float(score_str)
-        except ValueError:
-            if self.verbose >= 1:
-                logger.error(f"Failed to parse judge score: {score_str}")
-            return 0.5
 
     def _inform_generator(self, data: Dict[str, Any], score: float, reason: str):
         """Inform the generator about the quality of generated data."""
