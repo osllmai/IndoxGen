@@ -1,8 +1,8 @@
 import pandas as pd
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import warnings
 
-from .llm_generator import TextDataGenerator
+from ..synthCore import GenerativeDataSynth
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
@@ -42,13 +42,14 @@ def get_gan_module(prefer_tensor: bool = True):
 # Define the LLM initialization function
 def initialize_llm_synth(
         generator_llm,
-        judge_llm,
         columns: List[str],
         example_data: List[Dict[str, Any]],
         user_instruction: str,
-        diversity_threshold: float = 0.5,  # Adjusted for higher diversity
-        max_diversity_failures: int = 30,
-        verbose: int = 1
+        judge_llm: Optional[Any] = None,
+        real_data: Optional[List[Dict[str, Any]]] = None,
+        diversity_threshold: float = 0.7,
+        max_diversity_failures: int = 20,
+        verbose: int = 0
 ):
     """
     Initializes the LLM-based synthetic text generator setup.
@@ -77,7 +78,7 @@ def initialize_llm_synth(
     SyntheticDataGenerator
         Instance of the initialized synthetic data generator.
     """
-    return TextDataGenerator(
+    return GenerativeDataSynth(
         generator_llm=generator_llm,
         judge_llm=judge_llm,
         columns=columns,
@@ -85,6 +86,7 @@ def initialize_llm_synth(
         user_instruction=user_instruction,
         diversity_threshold=diversity_threshold,
         max_diversity_failures=max_diversity_failures,
+        real_data=real_data,
         verbose=verbose
     )
 
@@ -200,7 +202,7 @@ class TextTabularSynth:
     and LLM for text data.
     """
 
-    def __init__(self, tabular, text: TextDataGenerator):
+    def __init__(self, tabular, text: GenerativeDataSynth):
         """
         Initializes the TextTabularSynth pipeline.
 
