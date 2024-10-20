@@ -11,7 +11,6 @@ The framework leverages **GANs** for structured data generation and **LLMs** for
 - [Usage](#usage)
   - [Example: GAN and LLM Hybrid Pipeline](#gan-and-llm-hybrid-pipeline)
 - [Configuration](#configuration)
-- [Evaluation Methods](#evaluation-methods)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
 - [License](#license)
