@@ -234,22 +234,10 @@ class TextTabularSynth:
         synthetic_numerical_data = self.tabular.generate_samples(num_samples)
 
         # 2. Generate synthetic text data using the LLM with numerical context
-        synthetic_text_data_list = []
-        for idx in range(num_samples):
-            # Extract numerical context from the generated numerical data
-            numerical_context = synthetic_numerical_data.iloc[idx].to_dict()
-
-            # Generate corresponding text data based on the numerical context
-            generated_text = self.text._generate_single_data_point(context=numerical_context)
-
-            if generated_text and all(col in generated_text for col in self.text.columns):
-                synthetic_text_data_list.append(generated_text)
-            else:
-                # Handle cases where text generation fails
-                synthetic_text_data_list.append({col: '' for col in self.text.columns})
+        synthetic_text_data = self.text.generate_data(num_samples=num_samples)
 
         # Convert the list of generated text data to a DataFrame
-        synthetic_text_data = pd.DataFrame(synthetic_text_data_list)
+        # synthetic_text_data = pd.DataFrame(synthetic_text_data_list)
 
         # 3. Combine the numerical and text data into a single DataFrame
         synthetic_numerical_data.reset_index(drop=True, inplace=True)
